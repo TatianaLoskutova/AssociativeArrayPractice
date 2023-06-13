@@ -2,7 +2,7 @@ import {
     addNewBookToUser, addNewCompany,
     LaptopType,
     makeHairstyle,
-    moveUser, moveUserToOtherHouse, removeBook, updateBook,
+    moveUser, moveUserToOtherHouse, removeBook, updateBook, updateCompanyTitle, updateCompanyTitle2,
     upgradeUserLaptop,
     UserType,
     UserWithBooksType,
@@ -198,5 +198,43 @@ test('remove js book', () => {
     expect(userCopy.companies[2].title).toBe('Maersk')
     expect(userCopy.companies[2].id).toBe(3)
     expect(userCopy.companies[2]).toEqual({id: 3, title: 'Maersk'})
+
+})
+
+test('update companies name', () => {
+
+    let user: UserWithLaptopType & WithCompaniesType = {
+        name: 'Tanya',
+        hair: 36,
+        address: {
+            city: 'Minsk',
+            house: 12
+        },
+        laptop: {
+            title: 'ZenBook'
+        },
+        companies: [
+            {id: 1, title: 'Епам'},
+            {id: 2, title: 'It-Incubator'}
+        ]
+    }
+
+    const userCopy = updateCompanyTitle(user, 1, 'EPAM') as UserWithLaptopType & WithCompaniesType
+
+    expect(user).not.toBe(userCopy)
+    expect(user.address).toBe(userCopy.address)
+    expect(user.companies).not.toBe(userCopy.address)
+    expect(userCopy.companies[0].title).toBe('EPAM')
+})
+
+test('update company', () => {
+    let companies = { 'Tanya' : [{id: 1, title: 'Епам'}, {id: 2, title: 'It-Incubator'}],
+        'Artem' : [{id: 2, title: 'It-Incubator'}]};
+
+    const newCopy = updateCompanyTitle2(companies, 'Tanya', 1, 'Epam')
+
+    expect(newCopy['Tanya']).not.toBe(companies['Tanya'])
+    expect(newCopy['Artem']).toBe(companies['Artem'])
+    expect(newCopy['Tanya'][0].title).toBe('Epam')
 
 })
